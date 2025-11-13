@@ -28,6 +28,23 @@ export const newUser = async (req, res) => {
     }
 };
 
+export const getUser = async (req, res) => {
+    try {
+        const id = req.params.idUser;
+
+        if (!id) {
+            return res.status(400).json({msg : "Id não informado"})
+        }
+
+        const user = await userSchema.findById(id);
+        res.status(200).json(user)
+    } catch (error) {
+        console.error("Erro ao buscar usuário:", err);
+        res.status(500).json({ error: "Erro interno ao buscar usuário." });
+    }
+    
+}
+
 export const deleteUser = async (req, res) => {
     try {
         const id = req.params.id;
