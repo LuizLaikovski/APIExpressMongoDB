@@ -56,6 +56,15 @@ export const getUserAll = async (req, res) => {
 export const updateUser = async (req, res) => {
     try {
         const id = req.params.idUser;
+        const dataBody = req.body;
+
+        if (!id || !dataBody) {
+            return res.status(400).json({msg: "id não informado"});
+        }
+
+        const newUser = userSchema.findByIdAndUpdate(id, dataBody, {new: true});
+
+        res.status(200).json(newUser);
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
