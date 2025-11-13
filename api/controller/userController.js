@@ -14,13 +14,10 @@ export const newUser = async (req, res) => {
             return res.status(409).json({ message: "Este e-mail já está cadastrado." });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10
-
-
-        )
+        const hashedPassword = await bcrypt.hash(password, 10)
 
         const newUser = await userSchema.create({ name, email, password: hashedPassword });
-        
+
         res.status(201).json(newUser);
     } catch (err) {
         console.error("Erro ao criar usuário:", err);
@@ -33,7 +30,7 @@ export const getUser = async (req, res) => {
         const id = req.params.idUser;
 
         if (!id) {
-            return res.status(400).json({msg : "Id não informado"})
+            return res.status(400).json({ msg: "Id não informado" })
         }
 
         const user = await userSchema.findById(id);
@@ -42,7 +39,26 @@ export const getUser = async (req, res) => {
         console.error("Erro ao buscar usuário:", err);
         res.status(500).json({ error: "Erro interno ao buscar usuário." });
     }
-    
+
+}
+
+export const getUserAll = async (req, res) => {
+    try {
+        const user = await userSchema.find();
+        res.status(200).json(user)
+    } catch (error) {
+        console.error("Erro ao buscar usuário:", err);
+        res.status(500).json({ error: "Erro interno ao buscar usuário." });
+    }
+
+}
+
+export const updateUser = async (req, res) => {
+    try {
+        const id = req.params.idUser;
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
 }
 
 export const deleteUser = async (req, res) => {
@@ -54,8 +70,8 @@ export const deleteUser = async (req, res) => {
         }
 
         const deleterUser = await userSchema.findByIdAndDelete(id);
-        res.status(200).json({message: `O usuario do id ${id} foi deletado`})
+        res.status(200).json({ message: `O usuario do id ${id} foi deletado` })
     } catch (err) {
-        res.status(500).json({error: err.message})
+        res.status(500).json({ error: err.message })
     }
 }
