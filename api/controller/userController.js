@@ -18,7 +18,10 @@ export const newUser = async (req, res) => {
 
         const newUser = await userSchema.create({ name, email, password: hashedPassword });
 
-        res.status(201).json(newUser);
+        res.status(201).json({
+            name: newUser.name,
+            email: newUser.email,
+        });
     } catch (err) {
         console.error("Erro ao criar usuário:", err);
         res.status(500).json({ error: "Erro interno ao criar usuário." });
