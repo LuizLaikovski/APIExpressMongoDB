@@ -1,4 +1,5 @@
 import userSchema from "../schemas/userSchema.js";
+import bcrypt from "bcrypt";
 
 export const newUser = async (req, res) => {
     try {
@@ -13,7 +14,13 @@ export const newUser = async (req, res) => {
             return res.status(409).json({ message: "Este e-mail já está cadastrado." });
         }
 
-        const newUser = await userSchema.create({ name, email, password });
+        const hashedPassword = await bcrypt.hash(password, 10
+
+
+        )
+
+        const newUser = await userSchema.create({ name, email, password: hashedPassword });
+        
         res.status(201).json(newUser);
     } catch (err) {
         console.error("Erro ao criar usuário:", err);
