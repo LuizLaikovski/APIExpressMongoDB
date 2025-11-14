@@ -62,10 +62,10 @@ export const updateUser = async (req, res) => {
         const dataBody = req.body;
 
         if (!id || !dataBody) {
-            return res.status(400).json({msg: "id não informado"});
+            return res.status(400).json({ msg: "id não informado" });
         }
 
-        const newUser = userSchema.findByIdAndUpdate(id, dataBody, {new: true});
+        const newUser = userSchema.findByIdAndUpdate(id, dataBody, { new: true });
 
         res.status(200).json(newUser);
     } catch (err) {
@@ -87,3 +87,29 @@ export const deleteUser = async (req, res) => {
         res.status(500).json({ error: err.message })
     }
 }
+
+export const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        
+        if (!email || !password) {
+            return res.status(400).json({ msg: "Preencha email e senha" });
+        }
+
+        const user = await userSchema.findOne({ email });
+
+        if (!user) {
+            return res.status(400).json({ msg: "Usuário não encontrado" });
+        }
+        
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ msg: "Senha inválida" });
+        }
+        res.status(200).json({ result: true });
+    } catch (err) {
+        console.error("Houve um erro:", err);
+        res.status(500).json({ error: "Erro interno no servidor" });
+    }
+};
