@@ -155,7 +155,8 @@ export const loginUser = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             result: true,
-            role: user.role
+            role: user.role,
+            id: user.id,
         });
 
     } catch (err: any) {
